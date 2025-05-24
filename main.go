@@ -1,5 +1,6 @@
-package main
+package Utils
 
+import "log"
 
 
 var e = new(ErrorHandler)
@@ -14,6 +15,9 @@ type ErrorHandler struct {
 
 
 func Unwrap[T any](val T, err error) T {
+	if (e.HandleError == nil) {
+		log.Fatal("Nil ErrorHandler\n\tCall Utils.SetErrorHandler(func (err error) {...}) to determine how errors should be handled")
+	}
 	if err != nil {
 		e.HandleError(err)
 	}
@@ -47,6 +51,9 @@ func UnwrapOrElse[T any](val T, err error) func(func() T) T {
 }
 
 func Expect(err error) {
+	if (e.HandleError == nil) {
+		log.Fatal("Nil ErrorHandler\n\tCall Utils.SetErrorHandler(func (err error) {...}) to determine how errors should be handled")
+	}
 	if err != nil {
 		e.HandleError(err)
 	}
